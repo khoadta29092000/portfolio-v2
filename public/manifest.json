@@ -1,0 +1,15 @@
+{
+    "short_name": "Anh Khoa",
+    "name": "Portfolio",
+    "icons": [
+     
+    ],
+    "id": "?ref=homescreenpwa",
+    "start_url": "/",
+    "background_color": "#FFFFFF",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#3367D6",
+    "description": ""
+  }
+  
