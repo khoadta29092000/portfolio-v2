@@ -86,15 +86,11 @@ const Header: React.FC<TProps> = ({ isOpenSidebar }) => {
       <Flex>
         <Flex display={{ base: 'flex', md: 'none' }} marginLeft={'10px'}>
           <Flex>
-            <Flex mx="auto" mt={1}>
-              <Link href="/">
-                <Image
-                  src="/icons/club-icon.svg"
-                  alt="logo"
-                  width={30}
-                  height={26}
-                />
-              </Link>
+            <Flex mx="auto"  mt={1}>
+            <div className="text-left cursor-pointer">
+          <h2 className="text-xl font-bold font-serif">Do Tran Anh Khoa</h2>
+          <p>Front-End Developer</p>
+        </div>
             </Flex>
           </Flex>
         </Flex>
