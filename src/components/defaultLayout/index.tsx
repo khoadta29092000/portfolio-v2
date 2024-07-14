@@ -3,72 +3,80 @@ import { FC, useEffect, useState } from 'react';
 import Menu from './menu';
 import Header from './header';
 import Footer from './footer';
+import { usePortfolioIsLight } from '@/redux/home/selectors';
+import BodyComponent from './body';
 
-// import dynamic from 'next/dynamic';
-
-// const DynamicIframePip = dynamic(
-//   () => import('@/components/games/play-game/iframe-game/iframe-pip'),
-//   {
-//     ssr: false,
-//   },
-// );
 type TProps = {
-  children: React.ReactNode;
   isPy?: boolean;
   bg?: boolean;
 };
 
-const DefaultLayout: FC<TProps> = ({ children, isPy = true, bg = true }) => {
+export const menuItemHeader = [
+  { id: 1, title: 'about', href: '', bg: 'red' },
+  { id: 2, title: 'experiences', href: '', bg: 'blue' },
+  { id: 3, title: 'project', href: '', bg: 'yellow' },
+  { id: 4, title: 'skills', href: '', bg: 'violet' },
+  { id: 5, title: 'certificate', href: '', bg: 'pink' },
+  { id: 6, title: 'education', href: '', bg: 'orange' },
+  { id: 7, title: 'contract', href: '', bg: 'green' },
+];
+
+const DefaultLayout: FC<TProps> = ({ isPy = true, bg = true }) => {
+  const [activeTab, setActiveTab] = useState(menuItemHeader[0].id);
+
   const isMd = useBreakpointValue({
     base: false,
     md: true,
   });
 
-   const [isOpenSidebar, setIsOpenSideBar] = useState(true);
+  const [isOpenSidebar, setIsOpenSideBar] = useState(false);
+  const isLight = usePortfolioIsLight();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const aboutSection = document.getElementById('about');
+      const experiencesSection = document.getElementById('experiences');
+
+      if (aboutSection && experiencesSection) {
+        const currentScrollPosition = window.scrollY;
+
+        if (currentScrollPosition < aboutSection.offsetTop) {
+          // Scroll to About section
+          aboutSection.scrollIntoView({ behavior: 'smooth' });
+        } else if (
+          currentScrollPosition >= aboutSection.offsetTop &&
+          currentScrollPosition < experiencesSection.offsetTop
+        ) {
+          // Scroll to Experiences section
+          experiencesSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <Flex
-      w="100vw"
-      h="100vh"
-      position="relative"
-      // bg="gray.300"
-      bg="#16191f"
-    >
-      <Header isOpenSidebar={isOpenSidebar} />
-      <Menu isOpenSidebar={isOpenSidebar} />
+    <Flex w="100vw" h="100vh" position="relative" bg="#16191f">
+      <Header
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        isOpenSidebar={isOpenSidebar}
+      />
+      <Menu activeTab={activeTab} setActiveTab={setActiveTab} />
+
       <Flex
-        pl={{ base: 0, md: '64px', xl: isOpenSidebar ? 246 : '64px' }}
-        boxSizing="border-box"
-        mt="64px"
+        w="auto"
         direction="column"
-        w="full"
-        position="relative"
+        flex={1}
+        bg={isLight ? '#f0f2f5' : '#26282d'}
         transition="all 0.3s ease"
       >
-        <Flex
-          id="layout-content"
-          overflowY="scroll"
-          // bg="#16191f"
-          direction="column"
-          flex={1}
-          bg={
-            bg
-              ? '#16191f'
-              : 'radial-gradient(at 82% 100%, rgba(21, 11, 157, 0.5) 10%, transparent 40%), radial-gradient(at 10% 50%, rgba(77, 14, 125, 0.52) 7%, transparent 70%)'
-          }
-        >
-          <Flex
-            // pl={{ base: 3, md: 10 }}
-
-            px={{ base: 3, md: 3, xl: 10 }}
-            py={{ base: isPy ? 5 : 0, md: isPy ? 5 : 0, xl: isPy ? 10 : 0 }}
-          >
-            {children}
-          </Flex>
-          <Footer bg={bg} />
+        <Flex w="auto" flexDirection="column">
+          <BodyComponent activeTab={activeTab} setActiveTab={setActiveTab} />
         </Flex>
-
-        <Menu isOpenSidebar={isOpenSidebar} />
+        <Footer bg={bg} />
       </Flex>
     </Flex>
   );

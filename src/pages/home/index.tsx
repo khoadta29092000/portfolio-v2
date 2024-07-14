@@ -1,12 +1,9 @@
-import DefaultLayout from "@/components/defaultLayout";
-import { Flex } from "@chakra-ui/react";
+import DefaultLayout from '@/components/defaultLayout';
+import { Flex } from '@chakra-ui/react';
+import { useEffect } from 'react';
 
-function Home() {
-  return(
-    <DefaultLayout>
-    <Flex>a</Flex>
-    </DefaultLayout>
-  )
-}
+const Home = () => {
+  return <DefaultLayout />;
+};
 
 export default Home;

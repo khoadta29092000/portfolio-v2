@@ -3,108 +3,98 @@ import { IoIosMenu } from 'react-icons/io';
 import { TbHome } from 'react-icons/tb';
 import { IoGiftOutline } from 'react-icons/io5';
 import { FiLogIn } from 'react-icons/fi';
-
 import { useRouter } from 'next/router';
-
 import { useState } from 'react';
+import {
+  usePortfolioBackgroundColor,
+  usePortfolioIsLight,
+} from '@/redux/home/selectors';
+import useTranslation from 'next-translate/useTranslation';
 
 const menuItems = [
-    {
-        isLink: false,
-        title: 'About',
-        src: <IoIosMenu size={24} />,
-        href: '#About',
-    },
-    { isLink: false, title: 'Home', src: <TbHome size={24} />, href: '/' },
-    {
-        isLink: false,
-        title: 'Experiences',
-        src: <IoGiftOutline size={24} />,
-        href: '#Experiences',
-    },
-    {
-        isLink: false,
-        title: 'Project',
-        src: <IoGiftOutline size={24} />,
-        href: '#Project',
-    },
-    { isLink: false, title: 'Skills', src: <FiLogIn size={24} />, href: '#Skills' },
-    { isLink: false, title: 'Contract', src: <FiLogIn size={24} />, href: '#Contract' },
+  {
+    id: 1,
+    isLink: false,
+    title: 'about',
+    src: <IoIosMenu size={18} />,
+  },
+  { id: 2, isLink: false, title: 'experiences', src: <TbHome size={18} /> },
+  {
+    id: 3,
+    isLink: false,
+    title: 'project',
+    src: <IoGiftOutline size={18} />,
+  },
+  {
+    id: 4,
+    isLink: false,
+    title: 'skills',
+    src: <IoGiftOutline size={18} />,
+  },
+  {
+    id: 7,
+    isLink: false,
+    title: 'contract',
+    src: <FiLogIn size={18} />,
+  },
 ];
 
 type TProps = {
-    isOpenSidebar: boolean;
-    // eslint-disable-next-line no-unused-vars
+  activeTab: number;
+  setActiveTab: (value: number) => void;
 };
 
-const Menu: React.FC<TProps> = ({ isOpenSidebar }) => {
-    const router = useRouter();
-    const handleChangeOpen = (isLink: boolean, href: string) => {
-        if (isLink) {
-            router.push(href);
-            return;
-        } else if (href == 'menu') {
-        } else if (href == 'login') {
-        } else {
-            handleClickHover();
-        }
-    };
-    const [isClick, setIsClick] = useState(false);
-    const handleClickHover = () => {
-        setIsClick((prev) => !prev);
-    };
-
-    return (
+const Menu: React.FC<TProps> = ({ activeTab, setActiveTab }) => {
+  const router = useRouter();
+  const isLight = usePortfolioIsLight();
+  const backgroundColor = usePortfolioBackgroundColor();
+  const { t } = useTranslation('common');
+  return (
+    <Flex
+    borderTop={isLight ? '1px solid #e0e0e0' : '1px solid #3e3e3e'}
+      boxShadow={
+        isLight
+          ? '0px -4px 12px rgba(0, 0, 0, 0.1)'
+          : '0px -4px 12px rgba(0, 0, 0, 0.1)'
+      }
+      h="40px"
+      bottom={0}
+      bg={backgroundColor}
+      left={0}
+      position="fixed"
+      w="100vw"
+      padding="0 8px"
+      zIndex="99"
+      boxSizing="border-box"
+      display={{ base: 'flex', md: 'none' }}
+      justifyContent="center"
+      alignItems="center"
+    >
+      {menuItems.map((item, index) => (
         <Flex
-            h="64px"
-            bottom={0}
-            bg="rgb(21, 27, 37)"
-            left={0}
-            position="fixed"
-            w="100vw"
-            padding="0 8px"
-            zIndex="99"
-            boxSizing="border-box"
-            display={{ base: 'flex', md: 'none' }}
-            alignItems="center"
+          key={index}
+          onClick={() => setActiveTab(item.id)}
+          style={{
+            width: '100%',
+            height: '100%',
+            flexDirection: 'column',
+            cursor: 'pointer',
+          }}
+          textColor={
+            activeTab == item.id ? '#ce3df3' : isLight ? 'black' : 'white'
+          }
+          justifyContent="center"
+          alignItems="center"
+          textAlign="center"
         >
-            {menuItems.map((item, index) => {
-                return (
-                    <Flex 
-                        key={index}
-                        onClick={() => handleChangeOpen(item.isLink, item.href)}
-                        style={{
-                            width: '100%',
-                            padding: '8px 0px 16px',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            textAlign: 'center',
-                            placeItems: 'center',
-                            cursor: 'pointer',
-                        }}
-                    >
-                        <Flex
-                            flexDirection="column"
-                            alignItems="center"
-                            textAlign="center"
-                        >
-                            <Flex textColor="white" w="24px" h="27px" alignItems="center">
-                                {item.src}
-                            </Flex>
-                            <Text
-                                marginTop="3px"
-                                fontSize="10px"
-                                fontWeight="500"
-                                textColor="rgb(173, 173, 173)"
-                            >
-                                {item.title}
-                            </Text>
-                        </Flex>
-                    </Flex>
-                );
-            })}
+          <Flex>{item.src}</Flex>
+          <Text fontSize="10px" fontWeight="500">
+            {t(item.title)}
+          </Text>
         </Flex>
-    );
+      ))}
+    </Flex>
+  );
 };
 
 export default Menu;
