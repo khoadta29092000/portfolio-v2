@@ -90,6 +90,10 @@ const Header: React.FC<TProps> = ({
     );
   }, []);
 
+  const handleScrollToPanel = (index: number) => {
+    setActiveTab(index);
+  };
+
   return (
     <Flex
       transition="all 0.3s ease"
@@ -198,70 +202,79 @@ const Header: React.FC<TProps> = ({
         >
           {isLight ? <PiSunLight size={28} /> : <MdOutlineDarkMode size={28} />}
         </Flex>
-        <Popover
-          isOpen={isOpen}
-          onOpen={onToggle}
-          closeOnBlur={true}
-          onClose={onClose}
-          placement="top-start"
-        >
-          <PopoverTrigger>
-            <Flex
-              w="68px"
-              height="36px"
-              backdropFilter="blur(2px)"
-              padding="10px 8px"
-              borderRadius="4px"
-              background={
-                isLight ? 'rgba(35, 39, 47, .08)' : 'rgba(246, 247, 249, .05)'
-              }
-              cursor="pointer"
-              alignItems="center"
-              gap="6px"
-            >
-              <Image alt="Flat" src={getIconFlag(lang)} width={6} height={6} />
-              <FaChevronDown size={10} color="rgba(173, 173, 173, 1)" />
-            </Flex>
-          </PopoverTrigger>
-
-          <PopoverContent
-            bg="rgba(35, 44, 61, 0.4)"
-            borderRadius="8px"
-            backdropFilter="blur(15px)"
-            padding="12px 6px"
-            border="none"
-            width="300px"
+        <Flex>
+          <Popover
+            isOpen={isOpen}
+            onOpen={onToggle}
+            closeOnBlur={true}
+            onClose={onClose}
+            placement="top-start"
           >
-            <Grid templateColumns="repeat(2, 1fr)" gap="6px">
-              {itemFlag?.map((flag, index) => {
-                return (
-                  <GridItem
-                    key={index}
-                    _hover={{ background: 'rgb(173, 173, 173)' }}
-                    w="100%"
-                    borderRadius="5px"
-                    cursor="pointer"
-                    display="flex"
-                    onClick={() => handleSelectLanguage(flag.key)}
-                  >
-                    <Flex alignItems="center" p="4px" gap="10px">
-                      <Image
-                        alt={flag.alt}
-                        src={flag.src}
-                        width={6}
-                        height={6}
-                      />
-                      <Text fontSize="14px">{flag.title}</Text>
-                    </Flex>
-                  </GridItem>
-                );
-              })}
-            </Grid>
-          </PopoverContent>
-        </Popover>
+            <PopoverTrigger>
+              <Flex
+                w="68px"
+                height="36px"
+                backdropFilter="blur(2px)"
+                padding="10px 8px"
+                borderRadius="4px"
+                background={
+                  isLight ? 'rgba(35, 39, 47, .08)' : 'rgba(246, 247, 249, .05)'
+                }
+                cursor="pointer"
+                alignItems="center"
+                gap="6px"
+              >
+                <Image
+                  alt="Flat"
+                  src={getIconFlag(lang)}
+                  width={6}
+                  height={6}
+                  userSelect="none"
+                />
+                <FaChevronDown size={10} color="rgba(173, 173, 173, 1)" />
+              </Flex>
+            </PopoverTrigger>
+
+            <PopoverContent
+              bg="rgba(35, 44, 61, 0.4)"
+              borderRadius="8px"
+              backdropFilter="blur(15px)"
+              padding="12px 6px"
+              border="none"
+              width="300px"
+            >
+              <Grid templateColumns="repeat(2, 1fr)" gap="6px">
+                {itemFlag?.map((flag, index) => {
+                  return (
+                    <GridItem
+                      key={index}
+                      _hover={{ background: 'rgb(173, 173, 173)' }}
+                      w="100%"
+                      borderRadius="5px"
+                      cursor="pointer"
+                      display="flex"
+                      onClick={() => handleSelectLanguage(flag.key)}
+                    >
+                      <Flex alignItems="center" p="4px" gap="10px">
+                        <Image
+                          alt={flag.alt}
+                          src={flag.src}
+                          width={6}
+                          height={6}
+                        />
+                        <Text fontSize="14px">{flag.title}</Text>
+                      </Flex>
+                    </GridItem>
+                  );
+                })}
+              </Grid>
+            </PopoverContent>
+          </Popover>
+        </Flex>
       </Flex>
     </Flex>
   );
 };
 
 export default Header;
+
