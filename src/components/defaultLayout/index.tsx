@@ -21,12 +21,11 @@ export const menuItemHeader = [
   { id: 7, title: 'contract', href: '#contract', bg: 'green' },
 ];
 
-const DefaultLayout: FC<TProps> = ({ isPy = true, bg = true }) => {
+const DefaultLayout: FC<TProps> = () => {
   const isMd = useBreakpointValue({
     base: false,
     md: true,
   });
-  const [isOpenSidebar, setIsOpenSideBar] = useState(false);
   const isLight = usePortfolioIsLight();
   const [activeTab, setActiveTab] = useState(menuItemHeader[0].id);
 
@@ -38,12 +37,12 @@ const DefaultLayout: FC<TProps> = ({ isPy = true, bg = true }) => {
       overflowY={'hidden'}
       bg="#16191f"
     >
-      <Header
+      {/* <Header
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         isOpenSidebar={isOpenSidebar}
-      />
-      <Menu activeTab={activeTab} setActiveTab={setActiveTab} />
+      /> */}
+      {/* <Menu activeTab={activeTab} setActiveTab={setActiveTab} /> */}
 
       <Flex
         overflowY="scroll"
@@ -53,7 +52,11 @@ const DefaultLayout: FC<TProps> = ({ isPy = true, bg = true }) => {
         bg={isLight ? '#f0f2f5' : '#26282d'}
         transition="all 0.3s ease"
       >
-        <BodyComponent activeTab={activeTab} setActiveTab={setActiveTab} />
+        <BodyComponent
+          isMd={isMd}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
         {/* <Footer bg={bg} /> */}
       </Flex>
     </Flex>
