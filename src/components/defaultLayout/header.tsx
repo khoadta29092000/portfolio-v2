@@ -31,7 +31,6 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 
 type TProps = {
-  isOpenSidebar: boolean;
   activeTab: number;
   setActiveTab: (value: number) => void;
 };
@@ -58,11 +57,7 @@ export const itemFlag = [
   },
 ];
 
-const Header: React.FC<TProps> = ({
-  isOpenSidebar,
-  activeTab,
-  setActiveTab,
-}) => {
+const Header: React.FC<TProps> = ({ activeTab, setActiveTab }) => {
   const isLight = usePortfolioIsLight();
   const backgroundColor = usePortfolioBackgroundColor();
   const dispatch = useDispatch();
@@ -99,7 +94,7 @@ const Header: React.FC<TProps> = ({
       transition="all 0.3s ease"
       pl={{
         base: 0,
-        md: isOpenSidebar ? '64px' : '64px',
+        md: '64px',
       }}
       alignItems="center"
       position={'fixed'}

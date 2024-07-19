@@ -37,12 +37,8 @@ const DefaultLayout: FC<TProps> = () => {
       overflowY={'hidden'}
       bg="#16191f"
     >
-      {/* <Header
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        isOpenSidebar={isOpenSidebar}
-      /> */}
-      {/* <Menu activeTab={activeTab} setActiveTab={setActiveTab} /> */}
+      <Header activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Menu activeTab={activeTab} setActiveTab={setActiveTab} />
 
       <Flex
         overflowY="scroll"
@@ -57,7 +53,7 @@ const DefaultLayout: FC<TProps> = () => {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
-        {/* <Footer bg={bg} /> */}
+        <Footer />
       </Flex>
     </Flex>
   );

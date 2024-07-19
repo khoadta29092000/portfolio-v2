@@ -39,14 +39,13 @@ const BodyComponent: React.FC<TProps> = ({ activeTab, setActiveTab, isMd }) => {
 
       if (newIndex !== currentIndex) {
         setIsScrolling(true);
-        setActiveTab(menuItemHeader[newIndex].id);
 
         setTimeout(() => {
           sectionsRef.current[newIndex]?.scrollIntoView({});
-
+          setActiveTab(menuItemHeader[newIndex].id);
           setTimeout(() => {
             setIsScrolling(false);
-          }, 500);
+          }, 1000);
         }, 300);
       }
     };

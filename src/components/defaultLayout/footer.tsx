@@ -56,11 +56,9 @@ const menuItem = [
   },
 ];
 
-type TProps = {
-  bg?: boolean;
-};
+type TProps = {};
 
-const Footer: FC<TProps> = ({ bg = true }) => {
+const Footer: FC<TProps> = () => {
   const isLight = usePortfolioIsLight();
   const backgroundColor = usePortfolioBackgroundColor();
   const { t } = useTranslation('common');
@@ -238,3 +236,4 @@ const Footer: FC<TProps> = ({ bg = true }) => {
 };
 
 export default Footer;
+
