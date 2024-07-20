@@ -69,10 +69,12 @@ const Header: React.FC<TProps> = ({
   const { lang } = useTranslation();
   const { t } = useTranslation('common');
   const { isOpen, onToggle, onClose } = useDisclosure();
+
   const handleSelectLanguage = async (key: string) => {
     onClose();
     await setLanguage(key);
   };
+
   const handleChangeLight = () => {
     const newIsLight = !isLight;
     dispatch(setPortfolioIsLight(newIsLight));
@@ -139,7 +141,7 @@ const Header: React.FC<TProps> = ({
           Front-End Developer
         </Text>
       </Flex>
-      <Flex display={{ base: 'none', md: 'flex' }} gap={12} h="full">
+      <Flex display={{ base: 'none', xl: 'flex' }} gap={12} h="full">
         {menuItemHeader.map((item, index) => {
           return (
             <Link key={index} href={item.href}>
@@ -170,8 +172,9 @@ const Header: React.FC<TProps> = ({
                     transition={{ duration: 0.5 }}
                   ></motion.div>
                 )}
-                <Text position={'relative'} zIndex={4}></Text>
-                {t(item.title)}
+                <Text position={'relative'} zIndex={4}>
+                  {t(item.title)}
+                </Text>
               </Flex>
             </Link>
           );
@@ -277,4 +280,3 @@ const Header: React.FC<TProps> = ({
 };
 
 export default Header;
-

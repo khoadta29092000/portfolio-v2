@@ -5,6 +5,7 @@ import Header from './header';
 import Footer from './footer';
 import { usePortfolioIsLight } from '@/redux/home/selectors';
 import BodyComponent from './body';
+import Sidebar from './sidebar';
 
 type TProps = {
   isPy?: boolean;
@@ -44,7 +45,7 @@ const DefaultLayout: FC<TProps> = ({ isPy = true, bg = true }) => {
         isOpenSidebar={isOpenSidebar}
       />
       <Menu activeTab={activeTab} setActiveTab={setActiveTab} />
-
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <Flex
         overflowY="scroll"
         w="auto"
@@ -54,11 +55,10 @@ const DefaultLayout: FC<TProps> = ({ isPy = true, bg = true }) => {
         transition="all 0.3s ease"
       >
         <BodyComponent activeTab={activeTab} setActiveTab={setActiveTab} />
-        {/* <Footer bg={bg} /> */}
+        <Footer bg={bg} />
       </Flex>
     </Flex>
   );
 };
 
 export default DefaultLayout;
-

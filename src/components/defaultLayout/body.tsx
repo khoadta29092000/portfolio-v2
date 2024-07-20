@@ -26,7 +26,7 @@ const BodyComponent: React.FC<TProps> = ({ activeTab, setActiveTab }) => {
           justifyContent="center"
           alignItems="center"
           textAlign="center"
-          id={item.title}
+          //id={item.title}
           className="panel"
         >
           <Text color={isLight ? 'black' : 'white'}>{item.title}</Text>
@@ -37,4 +37,3 @@ const BodyComponent: React.FC<TProps> = ({ activeTab, setActiveTab }) => {
 };
 
 export default BodyComponent;
-
