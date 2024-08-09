@@ -5,6 +5,7 @@ import {
   usePortfolioBackgroundColor,
   usePortfolioIsLight,
 } from '@/redux/home/selectors';
+import { EThankYouBodyComponent } from '@/utils/type';
 
 type TProps = {
   activeTab: number;
@@ -17,6 +18,13 @@ const BodyComponent: React.FC<TProps> = ({ activeTab, setActiveTab, isMd }) => {
   const backgroundColor = usePortfolioBackgroundColor();
   const sectionsRef = useRef<HTMLDivElement[]>([]);
   const [isScrolling, setIsScrolling] = useState(false);
+
+  useEffect(() => {
+    if (isMd) {
+      setActiveTab(1);
+      sectionsRef.current[0]?.scrollIntoView({});
+    }
+  }, [isMd]);
 
   useEffect(() => {
     if (!isMd) return;
@@ -56,30 +64,32 @@ const BodyComponent: React.FC<TProps> = ({ activeTab, setActiveTab, isMd }) => {
       window.removeEventListener('wheel', handleScroll);
     };
   }, [activeTab, isScrolling, isMd]);
-  console.log('activeTab', activeTab);
 
   return (
-    <Flex scrollBehavior="smooth" w="auto" flexDirection="column">
+    <Flex w="auto" flexDirection="column">
       {menuItemHeader.map((item, index) => (
         <Flex
           transition="opacity 0.8s ease-in-out"
           key={item.id}
-          paddingTop="32px"
-          minHeight="100vh"
-          bg={item.bg}
+          paddingTop={item.id >= EThankYouBodyComponent ? '0' : '32px'}
+          minHeight={
+            item.id >= EThankYouBodyComponent ? '0' : isMd ? '100vh' : '100vh'
+          }
           justifyContent="center"
           alignItems="center"
           textAlign="center"
           id={item.title}
           className="panel"
-          opacity={!isMd ? 1 : activeTab === item.id ? 1 : 0.5}
+          opacity={
+            !isMd ? 1 : activeTab === item.id || activeTab >= 7 ? 1 : 0.5
+          }
           ref={(el) => {
             if (el) {
               sectionsRef.current[index] = el;
             }
           }}
         >
-          <Text color={isLight ? 'black' : 'white'}>{item.title}</Text>
+          {item.view}
         </Flex>
       ))}
     </Flex>

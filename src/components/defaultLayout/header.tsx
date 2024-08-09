@@ -29,10 +29,13 @@ import {
 import { menuItemHeader } from '.';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import MenuChangeLanguage from '../menuLanguage';
+import { EThankYouHeaderComponent } from '@/utils/type';
 
 type TProps = {
   activeTab: number;
   setActiveTab: (value: number) => void;
+  handleScrollToPanel: (index: number) => void;
 };
 
 export enum ECountry {
@@ -57,7 +60,11 @@ export const itemFlag = [
   },
 ];
 
-const Header: React.FC<TProps> = ({ activeTab, setActiveTab }) => {
+const Header: React.FC<TProps> = ({
+  activeTab,
+  setActiveTab,
+  handleScrollToPanel,
+}) => {
   const isLight = usePortfolioIsLight();
   const backgroundColor = usePortfolioBackgroundColor();
   const dispatch = useDispatch();
@@ -85,12 +92,9 @@ const Header: React.FC<TProps> = ({ activeTab, setActiveTab }) => {
     );
   }, []);
 
-  const handleScrollToPanel = (index: number) => {
-    setActiveTab(index);
-  };
-
   return (
     <Flex
+      display={activeTab >= EThankYouHeaderComponent ? 'none' : 'flex'}
       transition="all 0.3s ease"
       pl={{
         base: 0,
@@ -137,38 +141,40 @@ const Header: React.FC<TProps> = ({ activeTab, setActiveTab }) => {
       <Flex display={{ base: 'none', md: 'flex' }} gap={12} h="full">
         {menuItemHeader.map((item, index) => {
           return (
-            <Link key={index} href={item.href}>
-              <Flex
-                alignItems="center"
-                onClick={() => setActiveTab(item.id)}
-                fontSize="14px"
-                fontWeight={600}
-                _hover={{ textColor: activeTab !== item.id ? '#ce3df3' : '' }}
-                transition="all 0.3s ease"
-                cursor="pointer"
-                position="relative"
-                h="full"
-                textColor={
-                  activeTab == item.id ? '#ce3df3' : isLight ? 'black' : 'white'
-                }
-              >
-                {activeTab == item.id && (
-                  <motion.div
-                    layoutId="active-pill"
-                    style={{
-                      borderBottom: '2px solid #ce3df3',
-                      bottom: '0px',
-                      position: 'absolute',
-                      width: '100%',
-                      radius: '8px',
-                    }}
-                    transition={{ duration: 0.5 }}
-                  ></motion.div>
-                )}
-                <Text position={'relative'} zIndex={4}></Text>
-                {t(item.title)}
-              </Flex>
-            </Link>
+            <Flex
+              key={index}
+              alignItems="center"
+              onClick={() => {
+                setActiveTab(item.id);
+                handleScrollToPanel(index);
+              }}
+              fontSize="14px"
+              fontWeight={600}
+              _hover={{ textColor: activeTab !== item.id ? '#ce3df3' : '' }}
+              transition="all 0.3s ease"
+              cursor="pointer"
+              position="relative"
+              h="full"
+              textColor={
+                activeTab == item.id ? '#ce3df3' : isLight ? 'black' : 'white'
+              }
+            >
+              {activeTab == item.id && activeTab < EThankYouHeaderComponent && (
+                <motion.div
+                  layoutId="active-pill"
+                  style={{
+                    borderBottom: '2px solid #ce3df3',
+                    bottom: '0px',
+                    position: 'absolute',
+                    width: '100%',
+                    radius: '8px',
+                  }}
+                  transition={{ duration: 0.5 }}
+                ></motion.div>
+              )}
+              <Text position={'relative'} zIndex={4}></Text>
+              {t(item.title)}
+            </Flex>
           );
         })}
       </Flex>
@@ -197,75 +203,7 @@ const Header: React.FC<TProps> = ({ activeTab, setActiveTab }) => {
         >
           {isLight ? <PiSunLight size={28} /> : <MdOutlineDarkMode size={28} />}
         </Flex>
-        <Flex>
-          <Popover
-            isOpen={isOpen}
-            onOpen={onToggle}
-            closeOnBlur={true}
-            onClose={onClose}
-            placement="top-start"
-          >
-            <PopoverTrigger>
-              <Flex
-                w="68px"
-                height="36px"
-                backdropFilter="blur(2px)"
-                padding="10px 8px"
-                borderRadius="4px"
-                background={
-                  isLight ? 'rgba(35, 39, 47, .08)' : 'rgba(246, 247, 249, .05)'
-                }
-                cursor="pointer"
-                alignItems="center"
-                gap="6px"
-              >
-                <Image
-                  alt="Flat"
-                  src={getIconFlag(lang)}
-                  width={6}
-                  height={6}
-                  userSelect="none"
-                />
-                <FaChevronDown size={10} color="rgba(173, 173, 173, 1)" />
-              </Flex>
-            </PopoverTrigger>
-
-            <PopoverContent
-              bg="rgba(35, 44, 61, 0.4)"
-              borderRadius="8px"
-              backdropFilter="blur(15px)"
-              padding="12px 6px"
-              border="none"
-              width="300px"
-            >
-              <Grid templateColumns="repeat(2, 1fr)" gap="6px">
-                {itemFlag?.map((flag, index) => {
-                  return (
-                    <GridItem
-                      key={index}
-                      _hover={{ background: 'rgb(173, 173, 173)' }}
-                      w="100%"
-                      borderRadius="5px"
-                      cursor="pointer"
-                      display="flex"
-                      onClick={() => handleSelectLanguage(flag.key)}
-                    >
-                      <Flex alignItems="center" p="4px" gap="10px">
-                        <Image
-                          alt={flag.alt}
-                          src={flag.src}
-                          width={6}
-                          height={6}
-                        />
-                        <Text fontSize="14px">{flag.title}</Text>
-                      </Flex>
-                    </GridItem>
-                  );
-                })}
-              </Grid>
-            </PopoverContent>
-          </Popover>
-        </Flex>
+        <MenuChangeLanguage />
       </Flex>
     </Flex>
   );
