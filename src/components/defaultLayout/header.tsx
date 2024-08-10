@@ -143,7 +143,6 @@ const Header: React.FC<TProps> = ({
       <Flex display={{ base: 'none', xl: 'flex' }} gap={12} h="full">
         {menuItemHeader.map((item, index) => {
           return (
-           
             <Flex
               key={index}
               alignItems="center"
