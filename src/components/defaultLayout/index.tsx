@@ -5,6 +5,13 @@ import Header from './header';
 import Footer from './footer';
 import { usePortfolioIsLight } from '@/redux/home/selectors';
 import BodyComponent from './body';
+import AboutMeTabView from '../tabView/aboutMe';
+import ExperiencesTabView from '../tabView/experiences';
+import ProjectsTabView from '../tabView/projects';
+import SkillsTabView from '../tabView/skills';
+import EducationTabView from '../tabView/education';
+import ContractTabView from '../tabView/contract';
+import ThankTabView from '../tabView/thank';
 
 type TProps = {
   isPy?: boolean;
