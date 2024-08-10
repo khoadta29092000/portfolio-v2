@@ -12,6 +12,7 @@ import SkillsTabView from '../tabView/skills';
 import EducationTabView from '../tabView/education';
 import ContractTabView from '../tabView/contract';
 import ThankTabView from '../tabView/thank';
+import Sidebar from './sidebar';
 
 type TProps = {
   isPy?: boolean;
@@ -62,7 +63,7 @@ const DefaultLayout: FC<TProps> = () => {
         setActiveTab={setActiveTab}
       />
       <Menu activeTab={activeTab} setActiveTab={setActiveTab} />
-
+      <Sidebar isMd={isMd} activeTab={activeTab} setActiveTab={setActiveTab} />
       <Flex
         overflowY="scroll"
         w="auto"

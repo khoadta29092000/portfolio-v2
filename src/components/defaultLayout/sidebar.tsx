@@ -19,18 +19,24 @@ import {
 import useTranslation from 'next-translate/useTranslation';
 import { MdOutlineMenu } from 'react-icons/md';
 import { menuItemHeader } from '.';
+import { useEffect } from 'react';
 
 type TProps = {
   activeTab: number;
   setActiveTab: (value: number) => void;
+  isMd: boolean | undefined;
 };
 
-const Sidebar: React.FC<TProps> = ({ activeTab, setActiveTab }) => {
+const Sidebar: React.FC<TProps> = ({ activeTab, setActiveTab, isMd }) => {
   const router = useRouter();
   const isLight = usePortfolioIsLight();
   const backgroundColor = usePortfolioBackgroundColor();
   const { t } = useTranslation('common');
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  useEffect(() => {
+    if (isMd) return onClose();
+  }, [isMd]);
 
   return (
     <>
