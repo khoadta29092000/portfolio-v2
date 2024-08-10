@@ -6,6 +6,7 @@ import Head from 'next/head';
 import theme from '@/theme';
 import store from '@/redux/store';
 import { Provider } from 'react-redux';
+import UnrefreshLayout from '@/components/unrefreshLayout';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -19,7 +20,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           <link rel="manifest" href="/manifest.json" />
         </Head>
         <React.StrictMode>
-          <Component {...pageProps} />
+          <UnrefreshLayout>
+            <Component {...pageProps} />
+          </UnrefreshLayout>
         </React.StrictMode>
       </Provider>
     </ChakraProvider>
@@ -27,3 +30,4 @@ function MyApp({ Component, pageProps }: AppProps) {
 }
 
 export default MyApp;
+
