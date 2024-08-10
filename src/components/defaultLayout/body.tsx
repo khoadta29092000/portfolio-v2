@@ -64,7 +64,6 @@ const BodyComponent: React.FC<TProps> = ({ activeTab, setActiveTab, isMd }) => {
       window.removeEventListener('wheel', handleScroll);
     };
   }, [activeTab, isScrolling, isMd]);
-  console.log('activeTab', activeTab);
 
   return (
     <Flex w="auto" flexDirection="column">

@@ -5,14 +5,6 @@ import Header from './header';
 import Footer from './footer';
 import { usePortfolioIsLight } from '@/redux/home/selectors';
 import BodyComponent from './body';
-import AboutMeTabView from '../tabView/aboutMe';
-import ExperiencesTabView from '../tabView/experiences';
-import ProjectsTabView from '../tabView/projects';
-import EducationTabView from '../tabView/education';
-import SkillsTabView from '../tabView/skills';
-import ContractTabView from '../tabView/contract';
-import ThankTabView from '../tabView/thank';
-import Sidebar from './sidebar';
 
 type TProps = {
   isPy?: boolean;
@@ -62,8 +54,8 @@ const DefaultLayout: FC<TProps> = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
-      {/* <Menu activeTab={activeTab} setActiveTab={setActiveTab} /> */}
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Menu activeTab={activeTab} setActiveTab={setActiveTab} />
+
       <Flex
         overflowY="scroll"
         w="auto"
