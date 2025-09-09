@@ -54,7 +54,7 @@ const UnrefreshLayout: React.FC<LayoutProps> = ({ children }) => {
           bg="#16191F"
           w="100vw"
           h="100vh"
-          top={0}
+          top={-1}
           left={0}
           zIndex={9999}
           alignItems="center"
@@ -109,4 +109,3 @@ const PersistentComponent = () => {
 };
 
 export default UnrefreshLayout;
-

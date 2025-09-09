@@ -1,18 +1,6 @@
-import {
-  Flex,
-  Grid,
-  GridItem,
-  Image,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Text,
-  useDisclosure,
-} from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { FaChevronDown } from 'react-icons/fa';
+import { Flex, Text, useDisclosure } from '@chakra-ui/react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import setLanguage from 'next-translate/setLanguage';
-import { getIconFlag } from '@/utils/utils';
 import useTranslation from 'next-translate/useTranslation';
 import { PiSunLight } from 'react-icons/pi';
 import { MdOutlineDarkMode } from 'react-icons/md';
@@ -28,7 +16,6 @@ import {
 } from '@/redux/home/slice';
 import { menuItemHeader } from '.';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import MenuChangeLanguage from '../menuLanguage';
 import { EThankYouHeaderComponent } from '@/utils/type';
 
@@ -68,9 +55,15 @@ const Header: React.FC<TProps> = ({
   const isLight = usePortfolioIsLight();
   const backgroundColor = usePortfolioBackgroundColor();
   const dispatch = useDispatch();
-  const { lang } = useTranslation();
   const { t } = useTranslation('common');
   const { isOpen, onToggle, onClose } = useDisclosure();
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  const itemRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const [underline, setUnderline] = useState({
+    left: 0,
+    width: 0,
+    visible: false,
+  });
 
   const handleSelectLanguage = async (key: string) => {
     onClose();
@@ -94,14 +87,33 @@ const Header: React.FC<TProps> = ({
     );
   }, []);
 
+  useLayoutEffect(() => {
+    const updateUnderline = () => {
+      if (!menuRef.current) return;
+      const idx = menuItemHeader.findIndex((it) => it.id === activeTab);
+      const el = itemRefs.current[idx];
+      if (!el) {
+        setUnderline((s) => ({ ...s, visible: false }));
+        return;
+      }
+      const menuRect = menuRef.current.getBoundingClientRect();
+      const rect = el.getBoundingClientRect();
+      setUnderline({
+        left: rect.left - menuRect.left,
+        width: rect.width,
+        visible: true,
+      });
+    };
+    updateUnderline();
+    window.addEventListener('resize', updateUnderline);
+    return () => window.removeEventListener('resize', updateUnderline);
+  }, [activeTab, isLight, t]);
+
   return (
     <Flex
       display={activeTab >= EThankYouHeaderComponent ? 'none' : 'flex'}
       transition="all 0.3s ease"
-      pl={{
-        base: 0,
-        md: '64px',
-      }}
+      pl={{ base: 0, md: '64px' }}
       alignItems="center"
       position={'fixed'}
       h="64px"
@@ -133,55 +145,70 @@ const Header: React.FC<TProps> = ({
           Do Tran Anh Khoa
         </Text>
         <Text
-          fontFamily=" Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji"
+          fontFamily="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji"
           fontSize={{ base: '12px', md: '16px' }}
           color={isLight ? '#65676B' : 'white'}
         >
           Front-End Developer
         </Text>
       </Flex>
-      <Flex display={{ base: 'none', xl: 'flex' }} gap={12} h="full">
-        {menuItemHeader.map((item, index) => {
-          return (
-            <Flex
-              key={index}
-              alignItems="center"
-              onClick={() => {
-                setActiveTab(item.id);
-                handleScrollToPanel(index);
-              }}
-              fontSize="14px"
-              fontWeight={600}
-              _hover={{ textColor: activeTab !== item.id ? '#ce3df3' : '' }}
-              transition="all 0.3s ease"
-              cursor="pointer"
-              position="relative"
-              h="full"
-              textColor={
-                activeTab == item.id ? '#ce3df3' : isLight ? 'black' : 'white'
-              }
-            >
-              {activeTab == item.id && activeTab < EThankYouHeaderComponent && (
-                <motion.div
-                  layoutId="active-pill"
-                  style={{
-                    borderBottom: '2px solid #ce3df3',
-                    bottom: '0px',
-                    position: 'absolute',
-                    width: '100%',
-                    radius: '8px',
-                  }}
-                  transition={{ duration: 0.5 }}
-                ></motion.div>
-              )}
-              <Text position={'relative'} zIndex={4}></Text>
-              {t(item.title)}
-            </Flex>
-          );
-        })}
-      </Flex>
+
+      {/* Menu */}
       <Flex
-        // ml={'auto'}
+        ref={menuRef}
+        display={{ base: 'none', xl: 'flex' }}
+        gap={12}
+        h="full"
+        position="relative"
+      >
+        {menuItemHeader.map((item, index) => (
+          <Flex
+            key={item.id}
+            ref={(el) => {
+              itemRefs.current[index] = el;
+            }}
+            alignItems="center"
+            onClick={() => {
+              setActiveTab(item.id);
+              handleScrollToPanel(index);
+            }}
+            fontSize="14px"
+            fontWeight={600}
+            _hover={{ textColor: activeTab !== item.id ? '#ce3df3' : '' }}
+            transition="all 0.3s ease"
+            cursor="pointer"
+            position="relative"
+            h="full"
+            textColor={
+              activeTab == item.id ? '#ce3df3' : isLight ? 'black' : 'white'
+            }
+          >
+            <Text position="relative" zIndex={4}>
+              {t(item.title)}
+            </Text>
+          </Flex>
+        ))}
+
+        {/* underline chỉ render 1 lần ở đây */}
+        <motion.div
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            height: '2px',
+            borderRadius: '8px',
+            background: '#ce3df3',
+          }}
+          animate={{
+            x: underline.left,
+            width: underline.width,
+            opacity: underline.visible ? 1 : 0,
+          }}
+          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        />
+      </Flex>
+
+      {/* Right controls */}
+      <Flex
         color="white"
         gap={{ base: '10px', md: '20px' }}
         marginRight={{ base: '10px', sm: '20px', md: '40px' }}
@@ -193,9 +220,7 @@ const Header: React.FC<TProps> = ({
           background={
             isLight ? 'rgba(35, 39, 47, .08)' : 'rgba(246, 247, 249, .05)'
           }
-          _hover={{
-            opacity: 1,
-          }}
+          _hover={{ opacity: 1 }}
           height="36px"
           w="36px"
           rounded="8px"

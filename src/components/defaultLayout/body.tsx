@@ -47,9 +47,12 @@ const BodyComponent: React.FC<TProps> = ({ activeTab, setActiveTab, isMd }) => {
 
       if (newIndex !== currentIndex) {
         setIsScrolling(true);
-
+        console.log('Scrolling to index:', newIndex, currentIndex);
         setTimeout(() => {
-          sectionsRef.current[newIndex]?.scrollIntoView({});
+          sectionsRef.current[newIndex]?.scrollIntoView({
+            behavior: newIndex >= 6 ? 'smooth' : 'auto',
+            block: 'start',
+          });
           setActiveTab(menuItemHeader[newIndex].id);
           setTimeout(() => {
             setIsScrolling(false);
@@ -71,6 +74,7 @@ const BodyComponent: React.FC<TProps> = ({ activeTab, setActiveTab, isMd }) => {
         <Flex
           transition="opacity 0.8s ease-in-out"
           key={item.id}
+          id={item.title}
           paddingTop={item.id >= EThankYouBodyComponent ? '0' : '32px'}
           minHeight={
             item.id >= EThankYouBodyComponent ? '0' : isMd ? '100vh' : '100vh'
